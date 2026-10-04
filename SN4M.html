@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>SN4M</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ===========================
+         Dock (barra superiore fissa)
+         - Home
+         - Ricerca canzoni (Spotify)
+         - Impostazioni account
+    ============================ -->
+    <div id="dock" style="display:none;">
+        <div class="dock-icon" onclick="showSection('homePage')">🏠</div>
+
+        <!-- Barra di ricerca canzoni -->
+        <div id="searchBar">
+            <form id="searchForm">
+                <input type="text" id="searchInput" placeholder="Cosa vuoi ascoltare?">
+                <button type="submit">🔍</button>
+            </form>
+        </div>
+
+        <!-- ⚙️ Impostazioni account -->
+        <div class="dock-icon" onclick="toggleSettingsMenu()">⚙️</div>
+    </div>
+
+    <!-- ===========================
+         Start: ingresso applicazione
+         - Accesso rapido a Registrazione/Login
+    ============================ -->
+    <div id="startPage">
+        <h2>Benvenuto/a in SN4M</h2>
+        <div class="button-group">
+            <button onclick="showSection('registerPage')">Registrati</button>
+            <button onclick="showSection('loginPage')">Accedi</button>
+        </div>
+    </div>
+
+    <!-- ===========================
+         Registrazione utente
+    ============================ -->
+    <div id="registerPage" style="display:none;">
+        <h2>Registrazione</h2>
+        <form id="registerForm">
+            <input type="text" name="nome_utente" placeholder="Nome utente" required><br>
+            <input type="email" name="email" placeholder="E-mail" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <input type="password" name="conferma_password" placeholder="Conferma password" required><br>
+            <button type="submit">Registrati</button>
+        </form>
+        <button onclick="showSection('startPage')" class="backButton">⬅ Torna indietro</button>
+    </div>
+
+    <!-- ===========================
+         Login utente
+    ============================ -->
+    <div id="loginPage" style="display:none;">
+        <h2>Accedi</h2>
+        <form id="loginForm">
+            <input type="email" name="email" placeholder="E-mail" required><br>
+            <input type="password" name="password" placeholder="Password" required><br>
+            <button type="submit">Accedi</button>
+        </form>
+        <button onclick="showSection('startPage')" class="backButton">⬅ Torna indietro</button>
+    </div>
+
+    <!-- ===========================
+         Selezione generi musicali
+    ============================ -->
+    <div id="generiPage" style="display:none;">
+        <p><strong>Seleziona i tuoi generi musicali preferiti:</strong></p>
+        <form id="generiForm">
+            <label><input type="checkbox" name="generi[]" value="Pop"> Pop</label><br>
+            <label><input type="checkbox" name="generi[]" value="Rock"> Rock</label><br>
+            <label><input type="checkbox" name="generi[]" value="Hip-Hop"> Hip-Hop</label><br>
+            <label><input type="checkbox" name="generi[]" value="Rap"> Rap</label><br>
+            <label><input type="checkbox" name="generi[]" value="Trap"> Trap</label><br>
+            <label><input type="checkbox" name="generi[]" value="R&B"> R&B / Soul</label><br>
+            <label><input type="checkbox" name="generi[]" value="Jazz"> Jazz</label><br>
+            <label><input type="checkbox" name="generi[]" value="Blues"> Blues</label><br>
+            <label><input type="checkbox" name="generi[]" value="Classica"> Classica</label><br>
+            <label><input type="checkbox" name="generi[]" value="Dance"> Elettronica / Dance</label><br>
+            <label><input type="checkbox" name="generi[]" value="House"> House / Techno</label><br>
+            <label><input type="checkbox" name="generi[]" value="Reggae"> Reggae</label><br>
+            <label><input type="checkbox" name="generi[]" value="Metal"> Metal</label><br>
+            <label><input type="checkbox" name="generi[]" value="Country"> Country</label><br>
+            <label><input type="checkbox" name="generi[]" value="Folk"> Folk</label><br>
+            <label><input type="checkbox" name="generi[]" value="Indie"> Indie</label><br>
+            <label><input type="checkbox" name="generi[]" value="Latina"> Latina</label><br>
+            <button type="submit">Salva generi</button>
+        </form>
+    </div>
+
+    <!-- ===========================
+         Homepage (hub contenuti)
+         - Menu impostazioni
+         - Mie playlist
+         - Mie comunità
+         - Scopri comunità
+         - Esplora playlist condivise
+    ============================ -->
+    <div id="homePage" style="display:none;">
+        <p id="MessaggioBenvenuto"></p>
+
+        <!-- Menu impostazioni account -->
+        <div id="settingsMenu" style="display: none;" class="dropdown-menu">
+            <button onclick="showSection('changePasswordPage'); toggleSettingsMenu();">Cambia password</button>
+            <button onclick="showSection('changeUsernamePage'); toggleSettingsMenu();">Cambia nome utente</button>
+            <button onclick="showSection('changeEmailPage'); toggleSettingsMenu();">Cambia email</button>
+            <button onclick="showSection('generiPage'); toggleSettingsMenu();">Cambia generi musicali</button>
+            <button onclick="logout(); toggleSettingsMenu();">Logout</button>
+            <button onclick="eliminaAccount(); toggleSettingsMenu();" style="color: #FF4B4B;">Elimina account</button>
+        </div>
+
+        <!-- Sezione Playlist personali -->
+        <div class="section-header">
+            <h2>📂 MIE PLAYLIST</h2>
+        </div>
+        <div id="playlistGrid"></div>
+
+        <!-- Sezione Comunità a cui appartengo -->
+        <div class="section-header">
+            <h2>👥 MIE COMUNITÀ</h2>
+        </div>
+        <div id="communitiesGrid"></div>
+
+        <!-- Sezione Scopri comunità (ricerca e join) -->
+        <div class="section-header">
+            <h2>🔍 SCOPRI COMUNITÀ</h2>
+        </div>
+        <div id="discoverCommunities">
+            <div class="search-container">
+                <input type="text" id="searchCommunitiesInput" placeholder="Cerca comunità per nome, tag...">
+                <button onclick="searchCommunities()">🔍</button>
+            </div>
+            <div id="searchCommunitiesResults"></div>
+        </div>
+
+        <!-- Sezione Esplora playlist condivise (nelle community dell’utente) -->
+        <div class="section-header">
+            <h2>🌐 ESPLORA CONDIVISE (nelle tue comunità)</h2>
+        </div>
+        <div id="exploreShared">
+            <div class="search-container">
+                <div class="search-bar">
+                    <input type="text" id="sharedQuery" placeholder="Cerca per tag o canzoni/artisti...">
+                    <button onclick="cercaCondivise()">🔍</button>
+                </div>
+            </div>
+            <div id="sharedResults"></div>
+        </div>
+    </div>
+
+    <!-- ===========================
+         Risultati ricerca canzoni (Spotify)
+    ============================ -->
+    <div id="risultatiPage" style="display:none;">
+        <h2>Risultati ricerca</h2>
+        <div id="risultati"></div> <!-- Qui JS mette i risultati -->
+        <button onclick="showSection('homePage')" class="backButton">⬅ Torna alla home</button>
+    </div>
+
+    <!-- ===========================
+         Gestione playlist (creazione/modifica)
+    ============================ -->
+    <div id="playlistPage" style="display:none;">
+        <h2>Crea una nuova playlist</h2>
+        <form id="playlistForm">
+            <input type="text" id="playlistName" placeholder="Nome playlist" required>
+            <input type="text" id="playlistTags" placeholder="Tag (separati da virgola)">
+            <textarea id="playlistDescription" placeholder="Descrizione"></textarea>
+            <button type="submit">Crea Playlist</button>
+        </form>
+
+        <!-- Contenitore per mostrare le playlist create (opzionale) -->
+        <div id="playlistGridGestione"></div>
+    </div>
+
+    <!-- ===========================
+         Dettaglio playlist (brani)
+    ============================ -->
+    <div id="playlistDetailPage" style="display:none;">
+        <h2 id="playlistDetailTitle">Dettagli Playlist</h2>
+        <div id="playlistInfo"></div>
+        <div id="playlistTracks"></div>
+        <button onclick="showSection('homePage')" class="backButton">⬅ Torna alla home</button>
+    </div>
+
+    <!-- ===========================
+         Selezione playlist (aggiunta canzone)
+    ============================ -->
+    <div id="selectPlaylistPage" style="display:none;">
+        <h2 id="selectPlaylistTitle">Seleziona Playlist</h2>
+        <div id="selectPlaylistInfo"></div>
+        <div id="selectPlaylistGrid"></div>
+        <button onclick="showSection('risultatiPage')" class="backButton">⬅ Torna ai risultati</button>
+    </div>
+
+    <!-- ===========================
+         Creazione comunità
+    ============================ -->
+    <div id="createCommunityPage" style="display:none;">
+        <h2>Crea una nuova comunità</h2>
+        <form id="communityForm">
+            <input type="text" id="communityName" placeholder="Nome comunità" required>
+            <input type="text" id="communityTags" placeholder="Tag (separati da virgola)">
+            <textarea id="communityDescription" placeholder="Descrizione della comunità"></textarea>
+            <button type="submit">Crea Comunità</button>
+        </form>
+        <button onclick="showSection('homePage')" class="backButton">⬅ Torna alla home</button>
+    </div>
+
+    <!-- ===========================
+         Dettaglio comunità
+         - Info, membri, azioni (owner/membro), condivisioni
+    ============================ -->
+    <div id="communityDetailPage" style="display:none;">
+        <h2 id="communityDetailTitle">Dettagli Comunità</h2>
+        <div id="communityInfo"></div>
+        <div id="communityMembers"></div>
+        <div id="communityActions"></div>
+        <button onclick="showSection('homePage')" class="backButton">⬅ Torna alla home</button>
+    </div>
+
+    <!-- ===========================
+         Dialog condivisione playlist
+    ============================ -->
+    <div id="shareDialog" class="share-dialog">
+        <div class="share-dialog__content">
+            <h3 class="share-dialog__title">Condividi playlist</h3>
+            <p id="shareDialogPlaylistName" class="share-dialog__subtitle"></p>
+            <label>Seleziona comunità</label>
+            <select id="shareDialogCommunity" class="share-dialog__select"></select>
+            <div class="share-dialog__actions">
+                <button onclick="chiudiShareDialog()" class="share-dialog__btn share-dialog__btn--secondary">Annulla</button>
+                <button onclick="condividiPlaylistConCommunity()" class="share-dialog__btn share-dialog__btn--primary">Condividi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===========================
+         Impostazioni: Cambio password
+    ============================ -->
+    <div id="changePasswordPage" style="display: none;">
+        <h2>Cambia password</h2>
+        <form id="passwordForm">
+            <input type="password" name="oldPassword" placeholder="vecchia password" required><br>
+            <input type="password" name="newPassword" placeholder="nuova password" required><br>
+            <input type="password" name="confirmNewPassword" placeholder="conferma nuova password" required><br>
+            <button type="submit">Salva nuova password</button>
+        </form>
+        <button onclick="showSection('homePage')" class="backButton">⬅ Torna alla home</button>
+    </div>
+
+    <!-- ===========================
+         Impostazioni: Cambio username
+    ============================ -->
+    <div id="changeUsernamePage" style="display: none;">
+        <h2>Cambia nome utente</h2>
+        <form id="usernameForm">
+            <input type="text" name="oldUsername" placeholder="vecchio nome utente" required><br>
+            <input type="text" name="newUsername" placeholder="nuovo nome utente" required><br>
+            <input type="text" name="confirmNewUsername" placeholder="conferma nuovo nome utente" required><br>
+            <button type="submit">Salva nuovo nome utente</button>
+        </form>
+        <button onclick="showSection('homePage')" class="backButton">⬅ Torna alla home</button>
+    </div>
+
+    <!-- ===========================
+         Impostazioni: Cambio email
+    ============================ -->
+    <div id="changeEmailPage" style="display: none;">
+        <h2>Cambia email</h2>
+        <form id="emailForm">
+            <input type="email" name="oldEmail" placeholder="vecchia email" required><br>
+            <input type="email" name="newEmail" placeholder="nuova email" required><br>
+            <input type="email" name="confirmNewEmail" placeholder="conferma nuova email" required><br>
+            <button type="submit">Salva nuova email</button>
+        </form>
+        <button onclick="showSection('homePage')" class="backButton">⬅ Torna alla home</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
