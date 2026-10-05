@@ -265,8 +265,8 @@ async function getSpotifyToken() {
     if (savedToken && tokenExpiry && now < parseInt(tokenExpiry)) return savedToken;
 
     
-    const client_id = "968639233f43403bb33c2a34cfe460c6";
-    const client_secret = "a7b1752d3c4244ad8647326b6577b8ad";
+   const client_id = "INSERISCI_QUI_IL_TUO_CLIENT_ID";
+   const client_secret = "INSERISCI_QUI_IL_TUO_CLIENT_SECRET";
 
     const response = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
